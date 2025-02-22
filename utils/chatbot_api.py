@@ -1,44 +1,63 @@
 import os
+import json
 import time
 from typing import Tuple, Dict, Any
 from google.cloud import dialogflow
 from google.cloud.dialogflow_v2.types import TextInput, QueryInput
 from google.oauth2 import service_account
+from dotenv import load_dotenv
 
 # Load environment variables
-from config import DIALOGFLOW_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS
+load_dotenv()
 
-# Resolve the full path to service account file
-creds_path = os.path.abspath(os.path.join(os.path.dirname(__file__), GOOGLE_APPLICATION_CREDENTIALS))
+def get_credentials(credentials_json: str = None):
+    """Get credentials from environment variable or passed JSON"""
+    try:
+        if credentials_json:
+            creds_dict = json.loads(credentials_json)
+        else:
+            creds_dict = json.loads(os.getenv('GOOGLE_CREDENTIALS_JSON', '{}'))
+        return service_account.Credentials.from_service_account_info(creds_dict)
+    except Exception as e:
+        raise RuntimeError(f"Failed to load credentials: {e}")
 
-
-# Authenticate with Google Cloud
-try:
-    credentials = service_account.Credentials.from_service_account_file(
-        creds_path
-    )
-except Exception as e:
-    raise RuntimeError(f"Failed to load credentials: {e}")
-
-def query_dialogflow(text: str, session_id: str = "test_session",language_code: str = "en") -> Tuple[str, float, Dict[str, Any]]:
+def query_dialogflow(
+    text: str, 
+    project_id: str = None,
+    credentials_json: str = None,
+    session_id: str = "test_session", 
+    language_code: str = "en"
+) -> Tuple[str, float]:
     """
     Send a message to Dialogflow and get the response.
     
     Args:
         text: The user's input text
+        project_id: Dialogflow project ID (optional)
+        credentials_json: Service account credentials JSON (optional)
         session_id: Session identifier (default: "test_session")
+        language_code: Language code (default: "en")
         
     Returns:
         Tuple containing:
         - Response text
         - Response time in seconds
-        - Additional response details
     """
     try:
         start_time = time.time()
 
+        # Get credentials
+        credentials = get_credentials(credentials_json)
+        
+        # Initialize client
         client = dialogflow.SessionsClient(credentials=credentials)
-        session = client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
+        
+        # Use provided project ID or fall back to environment variable
+        project_id = project_id or os.getenv('DIALOGFLOW_PROJECT_ID')
+        if not project_id:
+            raise ValueError("Project ID not provided")
+            
+        session = client.session_path(project_id, session_id)
         
         text_input = TextInput(text=text, language_code=language_code)
         query_input = QueryInput(text=text_input)
@@ -48,18 +67,9 @@ def query_dialogflow(text: str, session_id: str = "test_session",language_code: 
         end_time = time.time()
         response_time = round(end_time - start_time, 2)
 
-        # Additional response details
-        response_details = {
-            "intent": response.query_result.intent.display_name,
-            "confidence": response.query_result.intent_detection_confidence,
-            "parameters": dict(response.query_result.parameters),
-            "sentiment": getattr(response.query_result, 'sentiment_analysis_result', None)
-        }
-
         return (
             response.query_result.fulfillment_text,
-            response_time,
-            #response_details
+            response_time
         )
 
     except Exception as e:

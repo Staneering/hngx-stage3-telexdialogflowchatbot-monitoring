@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: chatbot-monitor
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn api.main:app --host 0.0.0.0 --port <your-port-number>"
+    envVars:
+      - key: PROJECT_ID
+        value: "your-dialogflow-project-id"
+      - key: CREDENTIALS_JSON
+        value: "your-google-cloud-service-account-credentials-json"
+      - key: RESPONSE_THRESHOLD
+        value: "5"
+      - key: ALERT_LEVEL
+        value: "Medium"
+      - key: NOTIFY_ADMINS
+        value: "true"
+      - key: MONITOR_METRICS
+        value: "response_time,success_rate,error_rate"
