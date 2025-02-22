@@ -15,8 +15,6 @@ build/
 # VS Code
 .vscode/
 
-# Credentials
-service_account.json
 
 # Testing
 .pytest_cache/
