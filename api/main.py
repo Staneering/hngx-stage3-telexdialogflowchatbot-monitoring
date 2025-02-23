@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from utils.chatbot_api import query_dialogflow
 from utils.telex_api import send_to_telex
+import json
+import os
 
 class ChatMessage(BaseModel):
     message: str
@@ -38,3 +40,10 @@ async def chatbot_monitoring(chat_message: ChatMessage):
         "response_time": response_time,
         "telex_status": telex_status
     }
+
+@app.get("/integrations.json")
+async def get_integrations():
+    integrations_path = os.path.join(os.path.dirname(__file__), "../integrations.json")
+    with open(integrations_path, "r") as file:
+        integrations_data = json.load(file)
+    return integrations_data
