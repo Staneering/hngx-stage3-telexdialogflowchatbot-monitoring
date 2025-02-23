@@ -4,23 +4,19 @@ from typing import Tuple, Dict, Any
 from google.cloud import dialogflow
 from google.cloud.dialogflow_v2.types import TextInput, QueryInput
 from google.oauth2 import service_account
+import json
 
 # Load environment variables
 from config import DIALOGFLOW_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS
 
-# Resolve the full path to service account file
-creds_path = os.path.abspath(os.path.join(os.path.dirname(__file__), GOOGLE_APPLICATION_CREDENTIALS))
-
-
-# Authenticate with Google Cloud
+# Load service account credentials from environment variable
 try:
-    credentials = service_account.Credentials.from_service_account_file(
-        creds_path
-    )
+    service_account_info = json.loads(os.getenv('GOOGLE_CREDENTIALS_JSON'))
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
 except Exception as e:
     raise RuntimeError(f"Failed to load credentials: {e}")
 
-def query_dialogflow(text: str, session_id: str = "test_session",language_code: str = "en") -> Tuple[str, float, Dict[str, Any]]:
+def query_dialogflow(text: str, session_id: str = "test_session", language_code: str = "en") -> Tuple[str, float, Dict[str, Any]]:
     """
     Send a message to Dialogflow and get the response.
     
@@ -38,7 +34,7 @@ def query_dialogflow(text: str, session_id: str = "test_session",language_code: 
         start_time = time.time()
 
         client = dialogflow.SessionsClient(credentials=credentials)
-        session = client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
+        session = client.session_path(os.getenv("DIALOGFLOW_PROJECT_ID"), session_id)
         
         text_input = TextInput(text=text, language_code=language_code)
         query_input = QueryInput(text=text_input)

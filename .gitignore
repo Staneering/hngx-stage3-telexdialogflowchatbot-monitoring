@@ -17,6 +17,7 @@ build/
 
 # Credentials
 service_account.json
+utils/service_account.json
 
 # Testing
 .pytest_cache/

@@ -13,7 +13,7 @@ def format_credentials():
         f.write(f'DIALOGFLOW_PROJECT_ID=dialogflowproject-451421\n')
         f.write(f'GOOGLE_APPLICATION_CREDENTIALS=service_account.json\n')
         f.write(f'GOOGLE_CREDENTIALS_JSON={json_str}\n')
-        f.write(f'TELEX_WEBHOOK_URL=https://ping.telex.im/v1/webhooks/01952248-47be-7cd3-99ba-11342771dbaf\n')
+        f.write(f'TELEX_WEBHOOK_URL=https://ping.telex.im/v1/webhooks/0195225b-a295-7cda-b277-58799168510a\n')
         f.write(f'CHATBOT_API=dialogflow\n')
 
 if __name__ == "__main__":
