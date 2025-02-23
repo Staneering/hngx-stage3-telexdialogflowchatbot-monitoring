@@ -86,7 +86,7 @@ This project integrates a Dialogflow chatbot with performance monitoring and rep
 
 - **URL**: `/chatbot-monitoring`
 - **Method**: `POST`
-- **Description**: Sends a message to the chatbot and monitors its response.
+- **Description**: Sends a message to the chatbot and monitors its response. The response and performance data are sent to the Telex channel.
 - **Request Body**:
   ```json
   {
@@ -128,6 +128,16 @@ This project integrates a Dialogflow chatbot with performance monitoring and rep
      }
      ```
 7. **Send the request** and view the response.
+
+## Sample Message Sent to Telex Channel
+
+The following is a sample message sent to the Telex channel:
+
+```
+🤖 **Chatbot Performance Report**:
+📌 **Response**: Hello! How can I assist you today?
+⏱️ **Response Time**: 0.45 sec
+```
 
 ## License
 
