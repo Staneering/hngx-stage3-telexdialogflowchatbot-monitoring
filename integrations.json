@@ -8,7 +8,7 @@
       "app_description": "A Dialogflow chatbot integration that monitors response times and handles AI conversations",
       "app_logo": "https://images.app.goo.gl/qw5D8GvjmXbkb6GM9",
       "app_name": "Dialogflow Chat Monitor",
-      "app_url": "https://github.com/telex-integrations/hngx-stage3-telexchatbotmonitoring",
+      "app_url": "https://github.com/Staneering/hngx-stage3-telexdialogflowchatbot-monitoring",
       "background_color": "#4285F4"
     },
     "integration_category": "AI & Machine Learning",
