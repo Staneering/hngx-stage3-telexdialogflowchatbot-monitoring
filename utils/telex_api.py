@@ -1,6 +1,6 @@
 import requests
 import os
-from config import TELEX_WEBHOOK_URL
+#from config import TELEX_WEBHOOK_URL
 
 def send_to_telex(response, response_time):
     """Send chatbot performance data to Telex channel."""
