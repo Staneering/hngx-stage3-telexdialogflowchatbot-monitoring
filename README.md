@@ -138,6 +138,11 @@ The following is a sample message sent to the Telex channel:
 📌 **Response**: Hello! How can I assist you today?
 ⏱️ **Response Time**: 0.45 sec
 ```
+Here are screenshots of the message sent to the channel and successful result
+![Performance report sent to telex channel successfully](screenshots/screenshot2.png)
+![Performance report sent to telex channel successfully](screenshots/screenshot1.png)
+![GetRequest to Integrations.json](screenshots/screenshot3.png)
+![Post Request to send message to chatbot](screenshots/screenshot4.png)
 
 ## License
 
